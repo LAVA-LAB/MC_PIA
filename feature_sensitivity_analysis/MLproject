@@ -1,0 +1,69 @@
+name: feature_sensitivity_analysis
+entry_points:
+    main:
+        parameters:
+            # Taxi: a06c920b73be4015ad456011d60ffdd8
+            # Taxi Deadlock Imrpovement: ph4e9bq31c5ntqdfe8rg0oxu32xdwexqmtvc5i9ms9
+            # Taxi epsilon2 attack: d9d5wb6s9gvi4omd58t1mji0ul3uhs4uspquf3agfs
+            # Freeway: eb228d45f182499d985dc88480fa6315
+            # Collision1: 1a8fbc040431460989305ae5f72d69ca
+            # Collision2: e4add115e10d40319e1b0584e0910202
+            # Smart Grid: 09daacf1cfd94bed83c8e7fb969ad996
+            # Stock Market: 2ff1fb06d338455f8508b0c837e66039
+            project_name : {type: string, default: "experiments"}
+            parent_run_id : {type: string, default: "a06c920b73be4015ad456011d60ffdd8"}
+            # Model Checking Parameters
+            prism_dir : {type: string, default: "../prism_files"}
+            # transporter.prism
+            # freeway.prism
+            prism_file_path : {type: string, default: "transporter.prism"}
+            # MAX_JOBS=2,MAX_FUEL=10
+            # xMax=4,yMax=4,slickness=0
+            # max_consumption=4,renewable_limit=3,non_renewable_limit=3,grid_upper_bound=2
+            constant_definitions : {type: string, default: "MAX_JOBS=2,MAX_FUEL=10"}
+
+            
+            
+            # INTEREGSTING: P=? [ fuel>=4 U (G (jobs_done=1 & \"not_empty\" & passenger=true)) ]
+            # INTERESTING:  P=? [ fuel>=4 U (G (jobs_done=1 & \"not_empty\" & passenger=false)) ]
+            # INTERESTING: P=? [F (\"empty\" & passenger=true)]
+            # INTERESTING P=? [ (F \"empty\" & jobs_done=0) & (G !(x=1 & y=2)) ]
+            # INTERESTING P=? [ (((jobs_done=0 U (x=1 & y=2)) U (jobs_done=0 & !(x=1 & y=2))) U (\"empty\" & jobs_done=0)) ]
+            # INTERESTING P=? [ (!(x=1 & y=2) U (jobs_done=1 & !(x=1 & y=2))) U (\"empty\" & jobs_done=1)]
+            
+            # INTERESTING: Collision: P=? [F<=100 COLLISION=true]
+            # Smart Grid: P=? [F<=100 IS_BLACKOUT=true] 
+            # Stock Market: P=? [F "bankruptcy"]
+            # Freeway: P=? [F won=true]
+            prop : {type: string, default: "P=? [ (((jobs_done=0 U (x=1 & y=2)) U (jobs_done=0 & !(x=1 & y=2))) U (\"empty\" & jobs_done=0)) ]"}
+            reward_flag : {type: float, default: 1}
+            # Methods
+            # empirical_srim
+            # analytical_srim
+            permissive_input: {type: string, default: "empirical_srim"}
+            disabled_features: {type: string, default: ""}
+            # Taxi
+            # feature_fgsm,1,fuel;feature_fgsm,1,x;feature_fgsm,1,y;feature_fgsm,1,passenger_loc_x;feature_fgsm,1,passenger_loc_y;feature_fgsm,1,passenger_dest_x;feature_fgsm,1,passenger_dest_y;feature_fgsm,1,passenger;feature_fgsm,1,jobs_done;feature_fgsm,1,done
+            # feature_fgsm,2,fuel;feature_fgsm,2,x;feature_fgsm,2,y;feature_fgsm,2,passenger_loc_x;feature_fgsm,2,passenger_loc_y;feature_fgsm,2,passenger_dest_x;feature_fgsm,2,passenger_dest_y;feature_fgsm,2,passenger;feature_fgsm,2,jobs_done;feature_fgsm,2,done
+            # feature_fgsm,3,fuel;feature_fgsm,3,x;feature_fgsm,3,y;feature_fgsm,3,passenger_loc_x;feature_fgsm,3,passenger_loc_y;feature_fgsm,3,passenger_dest_x;feature_fgsm,3,passenger_dest_y;feature_fgsm,3,passenger;feature_fgsm,3,jobs_done;feature_fgsm,3,done
+            # fgsm,1,fuel;fgsm,1,x;fgsm,1,y;fgsm,1,passenger_loc_x;fgsm,1,passenger_loc_y;fgsm,1,passenger_dest_x;fgsm,1,passenger_dest_y;fgsm,1,passenger;fgsm,1,jobs_done;fgsm,1,done
+            # fgsm,2,fuel;fgsm,2,x;fgsm,2,y;fgsm,2,passenger_loc_x;fgsm,2,passenger_loc_y;fgsm,2,passenger_dest_x;fgsm,2,passenger_dest_y;fgsm,2,passenger;fgsm,2,jobs_done;fgsm,2,done
+            # fgsm,3,fuel;fgsm,3,x;fgsm,3,y;fgsm,3,passenger_loc_x;fgsm,3,passenger_loc_y;fgsm,3,passenger_dest_x;fgsm,3,passenger_dest_y;fgsm,3,passenger;fgsm,3,jobs_done;fgsm,3,done
+            
+            # Freeway
+            # feature_fgsm,1,px0;feature_fgsm,1,px1;feature_fgsm,1,px2;feature_fgsm,1,px3;feature_fgsm,1,px4;feature_fgsm,1,px5;feature_fgsm,1,px6;feature_fgsm,1,px7;feature_fgsm,1,px8;feature_fgsm,1,px9;feature_fgsm,1,px10;feature_fgsm,1,px11;feature_fgsm,1,px12;feature_fgsm,1,px13;feature_fgsm,1,px14;feature_fgsm,1,px15;feature_fgsm,1,px16;feature_fgsm,1,px17;feature_fgsm,1,px18;feature_fgsm,1,px19;feature_fgsm,1,px20;feature_fgsm,1,px21;feature_fgsm,1,px22;feature_fgsm,1,px23;feature_fgsm,1,px24;feature_fgsm,1,px25;feature_fgsm,1,px26;feature_fgsm,1,px27;feature_fgsm,1,px31;feature_fgsm,1,done
+            # Collision
+            # feature_fgsm,1,x;feature_fgsm,1,y;feature_fgsm,1,obstacle1_x;feature_fgsm,1,obstacle1_y;feature_fgsm,1,obstacle2_x;feature_fgsm,1,obstacle2_y;feature_fgsm,1,done
+
+            # Smart Grid
+            # feature_fgsm,1,energy;feature_fgsm,1,blackout;feature_fgsm,1,renewable;feature_fgsm,1,non_renewable;feature_fgsm,1,consumption
+
+            # Stock Market
+            # feature_fgsm,1,buy_price;feature_fgsm,1,sell_price;feature_fgsm,1,capital;feature_fgsm,1,stocks;feature_fgsm,1,last_action_price
+
+
+            abstract_features: {type: string, default: "feature_fgsm,1,x"}
+            range_plotting: {type: float, default: 10}
+
+        command: >-
+            python run.py --reward_flag={reward_flag} --range_plotting={range_plotting} --abstract_features={abstract_features} --permissive_input={permissive_input} --disabled_features={disabled_features} --project_name={project_name} --parent_run_id={parent_run_id} --prism_dir={prism_dir} --prism_file_path={prism_file_path} --constant_definitions={constant_definitions} --prop={prop}

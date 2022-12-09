@@ -1,0 +1,4 @@
+Project ID: 1
+Run ID: zllhfckb59ing7fd4laylt0drp35yqqp34qxultjz3
+Property Query: Pmin=? [F jobs_done=2]
+Property Result: 1.0
